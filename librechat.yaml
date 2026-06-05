@@ -7,9 +7,10 @@ endpoints:
       baseURL: "https://openrouter.ai/api/v1"
       models:
         default:
-          - "qwen/qwen3.6-plus:free"
-          - "google/gemma-4-26b-it:free"
-          - "google/gemini-2.0-flash-exp:free"
+          - "google/gemma-4-31b-it:free"
+          - "google/gemma-4-26b-a4b-it:free"
+          - "qwen/qwen3-coder:free"
+          - "nvidia/nemotron-3-super-120b-a12b:free"
         fetch: false
       dropParams: ["stop"]
       modelDisplayLabel: "OpenRouter"
