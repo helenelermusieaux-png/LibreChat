@@ -33,10 +33,6 @@ endpoints:
       - 'tools'
       - 'artifacts'
       - 'skills'
-      - 'execute_code'   # requis si les skills doivent exécuter du code
-      - 'file_search'
-      - 'actions'
-      - 'chain'
       
   custom:              # Bien imbriqué sous endpoints pour valider le schéma Zod
     - name: "OpenRouter"
