@@ -1,40 +1,38 @@
-version: "1.0.0" # Version du schéma exigée par le validateur pour la v1.3.x
+version: 1.3.13 # On déclare la version exacte pour le validateur
 cache: true
 
 # =====================================================================
-# 1. INTERFACE : Active toutes les fonctionnalités graphiques à l'écran
+# 1. INTERFACE : Débloque toutes les icônes de la barre de gauche
 # =====================================================================
 interface:
   customWelcome: "Bonjour {{user.name}}, comment puis-je vous aider ?"
-  endpointsMenu: true          # Sélection des fournisseurs en haut
-  modelSelect: true            # Sélection des modèles en haut
-  parameters: true             # Settings / Paramètres (en bas à gauche)
-  sidePanel: true              # Panneau latéral à droite
-  presets: true                # Pré-configurations
-  prompts: true                # Bibliothèque de prompts
-  bookmarks: true              # Favoris
-  multiConvo: true             # Gestion de plusieurs conversations
-  agents: true                 # Construction et partage d'agents (Icône Robot)
-  runCode: true                # REQUIS : Affiche le skill Code Interpreter
-  webSearch: true              # REQUIS : Affiche le skill Recherche Web
-  fileSearch: true             # REQUIS : Affiche le skill Analyse de fichiers (RAG)
+  endpointsMenu: true
+  modelSelect: true
+  parameters: true
+  sidePanel: true
+  presets: true
+  prompts: true
+  bookmarks: true
+  multiConvo: true
+  agents: true       # Affiche l'icône Robot (Création d'agents)
+  runCode: true      # Affiche l'interrupteur du skill Code Interpreter
+  webSearch: true    # Affiche l'interrupteur du skill Recherche Web
+  fileSearch: true   # Affiche l'interrupteur du skill RAG / Fichiers
 
 # =====================================================================
-# 2. AGENTS : Bloc racine obligatoire pour le moteur de compétences
+# 2. AGENT OPTIONS : La syntaxe exacte racine requise par la v1.3.13
 # =====================================================================
-agents:
-  enabled: true
-  agentOptions:                # Corrige le crash 'Unrecognized key(s) in object: agents'
-    capabilities:
-      - "context"
-      - "tools"                # Déclenche l'affichage de la section "Skills" à l'écran
-      - "artifacts"            # Panneau d'affichage dynamique de code/HTML
+agentOptions:          # Remplace la clé "agents" qui faisait crasher Render
+  capabilities:
+    - "context"
+    - "tools"          # Permet l'injection des Skills dans vos Agents
+    - "artifacts"      # Active le panneau latéral droit (Style Claude)
 
 # =====================================================================
-# 3. ENDPOINTS : Vos fournisseurs d'API (sans blocs d'interface imbriqués)
+# 3. ENDPOINTS : Vos connecteurs d'API
 # =====================================================================
 endpoints:
-  custom:                      # Bien imbriqué sous endpoints pour éviter le ZodError
+  custom:              # Bien imbriqué sous endpoints pour valider le schéma Zod
     - name: "OpenRouter"
       apiKey: "${OPENROUTER_KEY}"
       baseURL: "https://openrouter.ai/api/v1"
