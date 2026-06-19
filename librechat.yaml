@@ -1,35 +1,44 @@
-version: 1.3.2 # Ancienne version de schéma
+version: "1.1.5" # Version du schéma de configuration requise pour la v1.3.x
 cache: true
 
-# Configuration de l'interface : On bloque l'affichage des compétences
+# 1. Configuration de l'interface personnalisée
 interface:
   customWelcome: "Bonjour {{user.name}}, comment puis-je vous aider ?"
-  endpointsMenu: true
-  modelSelect: true
-  parameters: true
-  sidePanel: true
-  presets: true
-  prompts: true
-  bookmarks: true
-  multiConvo: true
-  agents: true       # L'onglet Robot apparaît...
-  runCode: false     # ... mais le bouton Code Interpreter est masqué !
-  webSearch: false   # ... mais le bouton Recherche Web est masqué !
-  fileSearch: false  # ... mais le bouton Fichiers est masqué !
+  endpointsMenu: true          # Affichage de la sélection des fournisseurs en haut
+  modelSelect: true            # Affichage de la sélection des modèles en haut
+  parameters: true             # Affichage des paramètres en bas à gauche
+  sidePanel: true              # Affichage du panneau latéral à droite
+  presets: true                # Affichage des pré-configurations
+  prompts: true                # Affichage de la bibliothèque de prompts
+  bookmarks: true              # Affichage des favoris
+  multiConvo: true             # Gestion de plusieurs conversations
+  agents: true                 # Construction et partage d'agents (Icône Robot)
+  runCode: true                # ACTIVÉ : Requis pour afficher le skill Code Interpreter
+  webSearch: true              # ACTIVÉ : Requis pour afficher le skill Recherche Web
+  fileSearch: true             # ACTIVÉ : Requis pour afficher le skill Analyse de fichiers
 
-# L'ancien piège : On imbrique 'agents' dans 'endpoints' et on met 'custom' au bon endroit
-endpoints:
-  agents:
+# 2. Moteur global des Agents (Placé à la racine, sorti de endpoints)
+agents:
+  enabled: true
+  agentOptions:
     capabilities:
       - "context"
-      - "tools"       # Ignoré par le backend à cet endroit
-      - "artifacts"   # Ignoré par le backend à cet endroit
-  
-  custom:             # Placé ici, Render ne crashe pas car il est bien sous 'endpoints'
+      - "tools"       # Déclenche l'affichage de la section "Skills" à l'écran
+      - "artifacts"   # Panneau d'affichage dynamique de code/HTML
+
+# 3. Définition des endpoints et fournisseurs personnalisés
+endpoints:
+  custom:             # Imbriqué sous 'endpoints' (Règle le ZodError/Crash de Render)
     - name: "OpenRouter"
       apiKey: "${OPENROUTER_KEY}"
       baseURL: "https://openrouter.ai/api/v1"
       models:
         default:
           - "google/gemma-4-31b-it:free"
+          - "google/gemma-4-26b-a4b-it:free"
+          - "qwen/qwen3-coder:free"
+          - "nvidia/nemotron-3-super-120b-a12b:free"
         fetch: false
+      dropParams:
+        - stop
+      modelDisplayLabel: "OpenRouter"
