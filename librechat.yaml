@@ -1,37 +1,43 @@
-version: 1.3.13 # On déclare la version exacte pour le validateur
+# Configuration version (required)
+version: 1.3.13
+
+# Cache settings: Set to true to enable caching
 cache: true
 
-# =====================================================================
-# 1. INTERFACE : Débloque toutes les icônes de la barre de gauche
-# =====================================================================
+# Custom interface configuration
 interface:
   customWelcome: "Bonjour {{user.name}}, comment puis-je vous aider ?"
-  endpointsMenu: true
-  modelSelect: true
-  parameters: true
-  sidePanel: true
-  presets: true
-  prompts: true
-  bookmarks: true
-  multiConvo: true
-  agents: true       # Affiche l'icône Robot (Création d'agents)
-  runCode: true      # Affiche l'interrupteur du skill Code Interpreter
-  webSearch: true    # Affiche l'interrupteur du skill Recherche Web
-  fileSearch: true   # Affiche l'interrupteur du skill RAG / Fichiers
+  endpointsMenu: true   # Sélection des fournisseurs en haut
+  modelSelect: true     # Sélection des modèles en haut
+  parameters: true      # Settings en bas à gauche
+  sidePanel: true        # Panneau de droite
+  presets: true           # Pré-configurations
+  prompts: true            # Bibliothèque de prompts
+  bookmarks: true           # Favoris
+  multiConvo: true           # Plusieurs conversations
+  agents: true                 # Construction et partage d'agents
+  skills: true                  # Active le panneau Skills côté UI
+  runCode: false                  # Nécessaire si vos skills exécutent du code
+  webSearch: false
+  fileSearch: false
 
-# =====================================================================
-# 2. AGENT OPTIONS : La syntaxe exacte racine requise par la v1.3.13
-# =====================================================================
-agentOptions:          # Remplace la clé "agents" qui faisait crasher Render
-  capabilities:
-    - "context"
-    - "tools"          # Permet l'injection des Skills dans vos Agents
-    - "artifacts"      # Active le panneau latéral droit (Style Claude)
-
-# =====================================================================
-# 3. ENDPOINTS : Vos connecteurs d'API
-# =====================================================================
+# Capacités des agents (c'est ICI que "skills" doit être déclaré,
+# pas dans un "agentOptions" qui n'existe pas dans le schéma)
 endpoints:
+  agents:
+    recursionLimit: 50
+    maxRecursionLimit: 100
+    disableBuilder: false
+    capabilities:
+      - 'context'
+      - 'tools'
+      - 'artifacts'
+      - 'skills'
+      - 'execute_code'   # requis si les skills doivent exécuter du code
+      - 'file_search'
+      - 'actions'
+      - 'chain'
+      
   custom:              # Bien imbriqué sous endpoints pour valider le schéma Zod
     - name: "OpenRouter"
       apiKey: "${OPENROUTER_KEY}"
