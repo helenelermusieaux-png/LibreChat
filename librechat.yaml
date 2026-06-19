@@ -1,42 +1,35 @@
-version: 1.3.12
+version: 1.3.2 # Ancienne version de schéma
 cache: true
 
-# Configuration de l'interface personnalisée
+# Configuration de l'interface : On bloque l'affichage des compétences
 interface:
   customWelcome: "Bonjour {{user.name}}, comment puis-je vous aider ?"
-  endpointsMenu: true          # Affichage de la sélection des fournisseurs en haut
-  modelSelect: true            # Affichage de la sélection des modèles en haut
-  parameters: true             # Affichage des paramètres en bas à gauche
-  sidePanel: true              # Affichage du panneau latéral à droite
-  presets: true                # Affichage des pré-configurations
-  prompts: true                # Affichage de la bibliothèque de prompts
-  bookmarks: true              # Affichage des favoris
-  multiConvo: true             # Gestion de plusieurs conversations
-  agents: true                 # Construction et partage d'agents
-  runCode: false               # Désactivation de l'exécution de code
-  webSearch: false             # Désactivation de la recherche web
-  fileSearch: false            # Désactivation de la recherche dans les fichiers
+  endpointsMenu: true
+  modelSelect: true
+  parameters: true
+  sidePanel: true
+  presets: true
+  prompts: true
+  bookmarks: true
+  multiConvo: true
+  agents: true       # L'onglet Robot apparaît...
+  runCode: false     # ... mais le bouton Code Interpreter est masqué !
+  webSearch: false   # ... mais le bouton Recherche Web est masqué !
+  fileSearch: false  # ... mais le bouton Fichiers est masqué !
 
-# Définition des endpoints personnalisés
+# L'ancien piège : On imbrique 'agents' dans 'endpoints' et on met 'custom' au bon endroit
 endpoints:
   agents:
     capabilities:
-      - context
-      - tools
-      - artifacts
-
-# Configuration des fournisseurs personnalisés
-custom:
-  - name: "OpenRouter"
-    apiKey: "${OPENROUTER_KEY}"
-    baseURL: "https://openrouter.ai/api/v1"
-    models:
-      default:
-        - "google/gemma-4-31b-it:free"
-        - "google/gemma-4-26b-a4b-it:free"
-        - "qwen/qwen3-coder:free"
-        - "nvidia/nemotron-3-super-120b-a12b:free"
-      fetch: false
-    dropParams:
-      - stop
-    modelDisplayLabel: "OpenRouter"
+      - "context"
+      - "tools"       # Ignoré par le backend à cet endroit
+      - "artifacts"   # Ignoré par le backend à cet endroit
+  
+  custom:             # Placé ici, Render ne crashe pas car il est bien sous 'endpoints'
+    - name: "OpenRouter"
+      apiKey: "${OPENROUTER_KEY}"
+      baseURL: "https://openrouter.ai/api/v1"
+      models:
+        default:
+          - "google/gemma-4-31b-it:free"
+        fetch: false
