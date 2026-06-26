@@ -1,28 +1,40 @@
 # Configuration version (required)
 version: 1.3.13
-
 # Cache settings: Set to true to enable caching
 cache: true
-
 # Custom interface configuration
 interface:
   customWelcome: "Bonjour {{user.name}}, comment puis-je vous aider ?"
-  endpointsMenu: true   # Sélection des fournisseurs en haut
-  modelSelect: true     # Sélection des modèles en haut
-  parameters: true      # Settings en bas à gauche
-  sidePanel: true        # Panneau de droite
-  presets: true           # Pré-configurations
-  prompts: true            # Bibliothèque de prompts
-  bookmarks: true           # Favoris
-  multiConvo: true           # Plusieurs conversations
-  agents: true                 # Construction et partage d'agents
-  skills: true                  # Active le panneau Skills côté UI
-  runCode: false                  # Nécessaire si vos skills exécutent du code
+  endpointsMenu: true
+  modelSelect: true
+  parameters: true
+  sidePanel: true
+  presets: true
+  prompts: true
+  bookmarks: true
+  multiConvo: true
+  agents: true
+  skills: true
+  runCode: false
   webSearch: false
   fileSearch: false
 
-# Capacités des agents (c'est ICI que "skills" doit être déclaré,
-# pas dans un "agentOptions" qui n'existe pas dans le schéma)
+# ⬇️ NOUVEAU BLOC — au même niveau que "interface" et "endpoints"
+modelSpecs:
+  list:
+    - name: "general-assistant"
+      label: "Assistant Général"
+      default: true
+      preset:
+        endpoint: "OpenRouter"
+        model: "google/gemma-4-31b-it:free"
+
+    - name: "clientx-docanalysis"
+      label: "ClientX - Analyse de documents"
+      preset:
+        endpoint: "OpenRouter"
+        model: "nvidia/nemotron-3-super-120b-a12b:free"
+
 endpoints:
   agents:
     recursionLimit: 50
@@ -33,8 +45,8 @@ endpoints:
       - 'tools'
       - 'artifacts'
       - 'skills'
-      
-  custom:              # Bien imbriqué sous endpoints pour valider le schéma Zod
+
+  custom:
     - name: "OpenRouter"
       apiKey: "${OPENROUTER_KEY}"
       baseURL: "https://openrouter.ai/api/v1"
